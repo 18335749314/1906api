@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/phpinfo',function(){
+	phpinfo();
+});
+Route::prefix('/test')->group(function(){
+    Route::get('/redis','TestController@testRedis');
+    Route::get('/test002','TestController@test002');
+});
