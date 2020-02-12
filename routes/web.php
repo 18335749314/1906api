@@ -17,7 +17,10 @@ Route::get('/', function () {
 Route::get('/phpinfo',function(){
 	phpinfo();
 });
-Route::prefix('/test')->group(function(){
-    Route::get('/redis','TestController@testRedis');
-    Route::get('/test002','TestController@test002');
+//测试
+Route::get('test/redis','TestController@testRedis');
+
+Route::prefix('api')->group(function (){
+    Route::get('/user/info','Api\UserController@info');
+    Route::post('/user/reg','Api\UserController@reg');
 });
