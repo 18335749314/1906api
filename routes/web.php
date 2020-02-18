@@ -34,4 +34,7 @@ Route::prefix('api')->group(function (){
 
 Route::prefix('goods')->group(function (){
     Route::any('/shop','Goods\GoodsController@shop');
+    Route::any('/count1','Goods\GoodsController@count1');
+    Route::any('/api3','Goods\GoodsController@api3')->middleware('api.filter');
+    Route::any('/api2','Goods\GoodsController@api2')->middleware('api.filter');
 });

@@ -55,6 +55,63 @@ class GoodsController extends Controller
 
     }
 
+    public function count1(){
+         //限制次数
+         $max =env('API_ACCESS_COUNT');  //接口
+
+
+        //判断次数是否已到上限
+        $key = 'count1';
+        $number = Redis::get($key);
+        echo "现有访问次数:".$number;
+
+        //超过上限
+        if($number>$max){
+            $timmeout = 10;
+            $timmeout = env('API_TIMEOUT_SECOND'); //10秒禁止访问
+            Redis::expire($key,$timmeout);
+            echo '接口访问受限,超过访问次数'.$max;
+            echo '请'.$timmeout.'十秒后访问';
+            die;
+        }
+        $count = Redis::incr($key);
+        echo $count;echo "<br>";
+        echo "访问正常";
+
+    }
+    public function api2(){
+        $ua =$_SERVER['HTTP_USER_AGENT'];
+        $u =md5($ua);
+        $u =substr($u,5,5);
+        echo "U:".$u;echo "<br>";
+
+        //获取当前uri
+        $uri = $_SERVER['REQUEST_URI'];
+        echo "URI: ".$uri;echo "<br>";
+
+        $md5_uri = substr(md5($uri),0,8);
+        echo $md5_uri;echo "<br>";
+
+        $key = 'count:uri:'.$u.':'.$md5_uri;
+        echo 'Redis Key:'.$key;echo "<br>";
+    }
+
+    public function api3(){
+        $ua =$_SERVER['HTTP_USER_AGENT'];
+        $u =md5($ua);
+        $u =substr($u,5,5);
+        echo "U:".$u;echo "<br>";
+
+        //获取当前uri
+        $uri = $_SERVER['REQUEST_URI'];
+        echo "URI: ".$uri;echo "<br>";
+
+        $md5_uri = substr(md5($uri),0,8);
+        echo $md5_uri;echo "<br>";
+
+        $key = 'count:uri:'.$u.':'.$md5_uri;
+        echo 'Redis Key:'.$key;echo "<br>";
+    }
 
 
 
