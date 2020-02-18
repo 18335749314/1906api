@@ -28,4 +28,10 @@ Route::prefix('api')->group(function (){
     Route::any('/user/curl2','Api\UserController@curl2');
     Route::any('/user/guzzle2','Api\UserController@guzzle2');
 
+    Route::any('/test/getUrl','Api\TestController@getUrl');
+    Route::any('/test/redisStrr1','Api\TestController@redisStrr1');
+});
+
+Route::prefix('goods')->group(function (){
+    Route::any('/shop','Goods\GoodsController@shop');
 });
