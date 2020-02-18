@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Goods;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\GoodsModel;
-use App\Model\GoodsStatisticModel;
 use Illuminate\Support\Facades\Redis;
 
 class GoodsController extends Controller
@@ -44,15 +43,13 @@ class GoodsController extends Controller
             'ip'   => $_SERVER['REMOTE_ADDR'],
             'created_at' => $created_at
         ];
-        $id = GoodsStatisticModel::insertGetId($data);
-
-        //计算统计信息
-        $pv = GoodsStatisticModel::where(['goods_id'=>$goods_id])->count(); //计算pv
-        echo "当前pv:" . $pv;echo "<br>";
-
-        //TODO laravel model 去重
-        $uv = GoodsStatisticModel::where(['goods_id'=>$goods_id])->distinct('ua')->count('ua');
-        echo "当前UV:" . $uv;echo "<br>";
+        $res = GoodsModel::insert($data);
+        $pv = GoodsModel::where(['goods_id'=>$goods_id])->count(); //计算pv   
+        echo $pv;
+        echo '<br>';
+        $uv = GoodsModel::where(['goods_id'=>$goods_id])->distinct('ua')->count('ua');
+        echo $uv;
+        dd($res);
 
 
 
