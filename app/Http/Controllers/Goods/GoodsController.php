@@ -113,10 +113,7 @@ class GoodsController extends Controller
         echo 'Redis Key:'.$key;echo "<br>";
     }
 
-
-
-
-
+    
 
 
 
