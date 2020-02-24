@@ -112,4 +112,41 @@ class TestController extends Controller
         echo "解密后数据:".$str;
     }
 
+
+    public function res1(){
+        $data = "Hello World";
+        $key = file_get_contents(storage_path('keys/pub_a.key'));
+
+        //加密
+        openssl_public_encrypt($data,$enc_data,$key);
+        var_dump($enc_data);
+
+        //将加密数据 base64_encode()
+        $send_data = base64_encode($enc_data);
+
+        //把编码后的加密的数据发送给A
+        $url = "http://api.1906.com/rsa/decrypt1?data=".$send_data;
+
+        $response = file_get_contents($url);
+
+        var_dump($response);
+    }
+
+    public function resDecrypt1(){
+        echo '<hr>';
+        echo "这是API";echo "<br>";
+        echo "<pre>";print_r($_GET);"</pre>";
+
+        //解密数据
+        $enc_data = base64_decode($_GET['data']);
+        var_dump($enc_data);
+
+        $priv = file_get_contents(storage_path('keys/priv_a.key'));
+        openssl_private_decrypt($enc_data,$dec_data,$priv);
+        var_dump($dec_data);
+    }
+
+
+
+
 }
