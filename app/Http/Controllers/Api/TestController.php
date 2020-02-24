@@ -114,36 +114,50 @@ class TestController extends Controller
 
 
     public function res1(){
-        $data = "Hello World";
+        $data = "Hello";
         $key = file_get_contents(storage_path('keys/pub_a.key'));
 
         //加密
         openssl_public_encrypt($data,$enc_data,$key);
-        var_dump($enc_data);
+        openssl_public_encrypt($data,$enc_str,$key);
+        // var_dump($enc_data);
 
         //将加密数据 base64_encode()
         $send_data = base64_encode($enc_data);
 
         //把编码后的加密的数据发送给A
-        $url = "http://api.1906.com/rsa/decrypt1?data=".$send_data;
+        $url = "http://api.1906.com/rsa/decrypt1?data=".urlencode($send_data);
 
         $response = file_get_contents($url);
 
-        var_dump($response);
-    }
+        echo "收到的响应数据:".$response;echo'</br>';
 
-    public function resDecrypt1(){
-        echo '<hr>';
-        echo "这是API";echo "<br>";
-        echo "<pre>";print_r($_GET);"</pre>";
+        $enc_str = base64_decode($arr['data']);
+        $key = file_get_get_contents(storage_path('keys/priv_b.key'));
+        openssl_private_decrypt($enc_str,$dec_str,$key);
+    }
+    //非对称加密  使用私钥解密
+    public function rsa1(){
+        // echo '<hr>';
+        // echo "这是API";echo "<br>";
+        // echo "<pre>";print_r($_GET);"</pre>";
 
         //解密数据
-        $enc_data = base64_decode($_GET['data']);
-        var_dump($enc_data);
-
+        $base64_data = base64_decode($_GET['data']);
+        $key = file_get_contents(storage_path('keys/priv_a.key'));
+        openssl_private_decrypt($base64_data,$dec_str,$key);
+        
+        //响应数据
+        $str = "that 's all right";
         $priv = file_get_contents(storage_path('keys/priv_a.key'));
-        openssl_private_decrypt($enc_data,$dec_data,$priv);
-        var_dump($dec_data);
+        openssl_private_decrypt($str,$enc_str,$priv);
+        // var_dump($dec_data);
+        $data = [
+            'error' => 0,
+            'msg'   => 'ok',
+            'data'  => base64_encode($enc_str)
+        ];
+        return $data;
     }
 
 
